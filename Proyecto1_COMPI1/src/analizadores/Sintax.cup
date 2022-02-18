@@ -1,0 +1,56 @@
+package analizadores;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+
+    public void syntax_error(Symbol s) {
+        this.s = s;
+    }
+
+    public Symbol getS() {
+        return this.s;
+    }
+:};
+
+terminal LlaveAbre, LlaveCierre, Conjunto, Separador, DosPuntos, Asignador,
+    Rango, PuntoComa, SaltoLinea, Punto, Asterisco, Comilla, Barra, Negativo,
+    Identificador, Numero, Mas, Interrogacion, Coma, ComillaSimple,
+    Cadena, ERROR;
+
+non terminal INICIO, CUERPO, DECLARACIONES, EVALUACIONES, ER,
+    CONJUNTO, EXPRESION_REGULAR, SEPARADOR, EXPRESION_EVALUAR;
+
+start with INICIO;
+
+INICIO ::= LlaveAbre CUERPO  LlaveCierre
+;
+CUERPO ::= DECLARACIONES SEPARADOR EVALUACIONES
+;
+DECLARACIONES ::= CONJUNTO DECLARACIONES | 
+    CONJUNTO |
+    EXPRESION_REGULAR DECLARACIONES | 
+    EXPRESION_REGULAR
+;
+SEPARADOR ::= Separador SEPARADOR | Separador
+;
+EVALUACIONES ::= EXPRESION_EVALUAR EVALUACIONES |
+    EXPRESION_EVALUAR
+;
+CONJUNTO ::= Conjunto DosPuntos Identificador Asignador Rango PuntoComa
+;
+EXPRESION_REGULAR ::= Identificador Asignador ER PuntoComa
+;
+ER ::= Punto ER | Punto | 
+    LlaveAbre Identificador LlaveCierre ER |
+    LlaveAbre Identificador LlaveCierre |
+    Asterisco ER | Asterisco |
+    Cadena ER | Cadena |
+    Mas ER | Mas |
+    Barra ER | Barra |
+    Interrogacion ER | Interrogacion
+;   
+EXPRESION_EVALUAR ::= Identificador DosPuntos Cadena PuntoComa
+;

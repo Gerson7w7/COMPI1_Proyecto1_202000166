@@ -1,0 +1,25 @@
+{
+@
+////// CONJUNTOS (estos son comentarios)
+CONJ: letra -> a~z; @
+CONJ: digito -> 0~9;
+CONJ: simbolos -> !~&;
+CONJ: simbolos -> a,b,c,d,e,f;
+!
+////// EXPRESIONES REGULARES (mas comentarios)
+
+ExpReg1 -> .{letra}*|"_"|{letra}{digito};
+ExpresionReg2 -> .{digito}."."+{digito};
+RegEx3 -> .{digito}*|"_"|{letra}{digito};
+
+%%
+%%
+
+<! commentario
+multi 
+linea
+oooa !>
+
+ExpReg1: "primerLexemaCokoa";
+ExpresionReg2: "34.44";
+}
