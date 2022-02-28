@@ -1,0 +1,10 @@
+digraph automata {
+rankdir=LR
+ini [shape="none" label=""]
+S0[shape="circle"];
+S1[shape="doublecircle"];
+
+ini->S0;
+S0->S1[label="{letra}"];
+S1->S1[label="{letra}|\"_\"|{digito}"]
+}

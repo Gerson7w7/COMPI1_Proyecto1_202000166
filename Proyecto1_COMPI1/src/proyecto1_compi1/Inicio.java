@@ -6,6 +6,8 @@
 package proyecto1_compi1;
 
 import analizadores.Archivos;
+import clases.AFD;
+import clases.AFN;
 import clases.AST;
 import clases.ExpresionRegular;
 import clases.Html;
@@ -285,12 +287,25 @@ public class Inicio extends javax.swing.JFrame {
             System.out.println("sisoi ggggg");
             AST arbol;
             for(ExpresionRegular exp : archivo.expresionesRegulares) {
+                // primer reporte (arbol sintactico)
                 arbol = new AST(exp.nombreVariable);
                 arbol.regex(exp.expresionRegular);
                 arbol.anulables(arbol.raiz);
                 arbol.id = 1;
                 arbol.primerosUltimos(arbol.raiz);
                 arbol.graphviz();
+                // segundo reporte (tabla de siguientes)
+                arbol.siguientes();
+                // tercer reporte (tabla de transiciones)
+                arbol.transiciones();
+                // automata AFD 
+                AFD afd = new AFD(exp.nombreVariable);
+                afd.tablaTransiciones(arbol.tablaTransiciones);
+                //afd.introRegex(archivo.conjuntos);
+                afd.graphviz();
+                // automata AFN (Thompson)
+                AFN afn = new AFN();
+                afn.recorridoAST(arbol.raiz);
             }
         } else {
            // creando reportes

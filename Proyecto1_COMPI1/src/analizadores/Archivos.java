@@ -179,7 +179,7 @@ public class Archivos {
                     columna += lexer.yylength();
                     String descripcion = "El caracter \"" + lexer.lexeme + "\" no se ha reconocido.";
                     this.errores.add(new Error("Lexico", descripcion, linea, columna));
-                    resultado += "<Error>\t" + lexer.lexeme + "    columna: " + columna + "\n";
+                    resultado += "<Error>\t" + lexer.lexeme + "    linea: " + linea + "    columna: " + columna + "\n";
                     break;
                 default:
                     columna += lexer.yylength();
@@ -189,12 +189,11 @@ public class Archivos {
     }
     
     public String analizadorSintactico(String expr) {
-        Sintax s = new Sintax(new analizadores.LexerCup(new StringReader(expr)));
-     
-        try {
-            s.parse();
+        Sintax s = new Sintax(new analizadores.LexerCup(new StringReader(expr)));  
+        try {            
+            s.parse();         
             return "Análisis realizado correctamente.";
-        } catch (Exception ex) {
+        } catch (Exception ex) {   
             Symbol sym = s.getS();
             String descripcion = "El componente \"" + sym.value + "\" no se esperaba.";
             this.errores.add(new Error("Sintáctico", descripcion, sym.right, sym.left));

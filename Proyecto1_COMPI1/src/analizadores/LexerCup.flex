@@ -23,6 +23,7 @@ RANGO = ."~".|.(",".)+
     private Symbol symbol(int type, Object value){
         return new Symbol(type, yyline, yycolumn, value);
     }
+
     private Symbol symbol(int type){
         return new Symbol(type, yyline, yycolumn);
     }

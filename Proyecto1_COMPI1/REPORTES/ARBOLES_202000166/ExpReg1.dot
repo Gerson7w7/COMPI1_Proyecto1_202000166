@@ -1,0 +1,23 @@
+digraph arbol {
+n1[shape="record" label="1| . |5"]
+n3[shape="record" label="1| . |1,2,3,4"]
+n4[shape="record" label="1| {letra} |1"]
+n5[shape="record" label="2,3,4| * |2,3,4"]
+n6[shape="record" label="2,3,4| or |2,3,4"]
+n7[shape="record" label="2| \"_\" |2"]
+n8[shape="record" label="3,4| or |3,4"]
+n9[shape="record" label="3| {letra} |3"]
+n10[shape="record" label="4| {digito} |4"]
+n2[shape="record" label="5| # |5"]
+
+n8-> n9 [label="N"]
+n8-> n10 [label="N"]
+n6-> n7 [label="N"]
+n6-> n8 [label="N"]
+n5-> n6 [label="N"]
+n3-> n4 [label="N"]
+n3-> n5 [label="A"]
+n1-> n3 [label="N"]
+n1-> n2 [label="N"]
+
+}
