@@ -304,8 +304,10 @@ public class Inicio extends javax.swing.JFrame {
                 //afd.introRegex(archivo.conjuntos);
                 afd.graphviz();
                 // automata AFN (Thompson)
-                AFN afn = new AFN();
+                AFN afn = new AFN(exp.nombreVariable);
                 afn.recorridoAST(arbol.raiz);
+                afn.addInicio();
+                afn.graphviz();
             }
         } else {
            // creando reportes

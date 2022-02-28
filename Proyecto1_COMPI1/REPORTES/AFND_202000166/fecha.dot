@@ -1,0 +1,30 @@
+digraph afn {
+rankdir=LR
+S0[shape="circle"]
+S11[shape="circle"]
+S10[shape="circle"]
+S9[shape="circle"]
+S8[shape="circle"]
+S7[shape="circle"]
+S6[shape="circle"]
+S5[shape="circle"]
+S4[shape="circle"]
+S3[shape="circle"]
+S1[shape="circle"]
+S2[shape="circle"]
+S12[shape="doublecircle"];
+
+S0->S11 [label="{digito}"]
+S11->S10 [label="{digito}"]
+S10->S9 [label="\"/\""]
+S9->S8 [label="{digito}"]
+S8->S7 [label="{digito}"]
+S7->S6 [label="\"/\""]
+S6->S5 [label="{digito}"]
+S5->S4 [label="{digito}"]
+S4->S3 [label="{digito}"]
+S3->S1 [label="{digito}"]
+S1->S2 [label="{digito}"]
+S2->S12 [label="#"]
+
+}
