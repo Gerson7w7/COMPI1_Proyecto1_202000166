@@ -449,7 +449,6 @@ public class Inicio extends javax.swing.JFrame {
             // seteando el text area con la info necesaria
             jTextArea2.setText("Error al mostrar la imagen. Debería de analizar algún archivo primero.");
         }
-
     }//GEN-LAST:event_imagenesActionPerformed
 
     void mostrarImagen(String ruta) {
@@ -457,7 +456,7 @@ public class Inicio extends javax.swing.JFrame {
         ImageIcon icono = new ImageIcon(
                 imagen.getImage().getScaledInstance(this.imagenLabel.getWidth(),
                         this.imagenLabel.getHeight(),
-                        Image.SCALE_DEFAULT)
+                        Image.SCALE_SMOOTH)
         );
         this.imagenLabel.setIcon(icono);
         this.repaint();
