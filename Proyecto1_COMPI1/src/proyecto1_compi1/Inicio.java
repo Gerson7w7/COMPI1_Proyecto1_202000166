@@ -11,12 +11,16 @@ import clases.AFN;
 import clases.AST;
 import clases.ExpresionRegular;
 import clases.Html;
+import clases.RegExpEvaluar;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -27,11 +31,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  */
 public class Inicio extends javax.swing.JFrame {
 
+    Archivos archivo = new Archivos();
+    ArrayList<AFD> afds = new ArrayList();
+    int siguiente = 0;
+
     /**
      * Creates new form Inicio
      */
     int contador = 1;
-    
+
     public Inicio() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -50,8 +58,6 @@ public class Inicio extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
@@ -60,6 +66,10 @@ public class Inicio extends javax.swing.JFrame {
         jTextArea2 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
+        imagenLabel = new javax.swing.JLabel();
+        imagenes = new javax.swing.JComboBox<>();
+        jButton9 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 255, 102));
@@ -102,10 +112,6 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setText("Generar automatas");
-
-        jButton6.setText("Analizar y generar");
-
         jButton7.setText("Salir");
         jButton7.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -138,6 +144,22 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        imagenes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AFD", "AFN", "ARBOLES" }));
+        imagenes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                imagenesActionPerformed(evt);
+            }
+        });
+
+        jButton9.setText("Siguiente");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Reportes gráficos");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -150,27 +172,37 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton5)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 120, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton7))
-            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(312, 804, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel2)
-                                    .addGap(240, 240, 240)
-                                    .addComponent(jButton8))
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                            .addComponent(imagenLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jButton8)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel3)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(imagenes, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jButton9))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(20, 20, 20)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addGroup(layout.createSequentialGroup()
+                                                .addComponent(jLabel2)
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(jScrollPane2))))))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,21 +212,24 @@ public class Inicio extends javax.swing.JFrame {
                     .addComponent(jButton2)
                     .addComponent(jButton3)
                     .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addComponent(jButton6)
                     .addComponent(jButton7))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2))
-                    .addComponent(jButton8))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(imagenes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton9)
+                    .addComponent(jButton8)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(imagenLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -226,20 +261,20 @@ public class Inicio extends javax.swing.JFrame {
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.exp", "exp");
         fc.setFileFilter(filtro);
         int seleccion = fc.showOpenDialog(this);
-        if(seleccion == JFileChooser.APPROVE_OPTION){
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
             File fichero = fc.getSelectedFile();
             Archivos.rutaG = fichero.getAbsolutePath();
-            
-            try (FileReader fr = new FileReader(fichero)){
+
+            try (FileReader fr = new FileReader(fichero)) {
                 String cadena = "";
                 int valor = fr.read();
-                while(valor != -1){
-                    cadena = cadena + (char)valor;
+                while (valor != -1) {
+                    cadena = cadena + (char) valor;
                     valor = fr.read();
                 }
                 this.jTextArea1.setText(cadena);
-            }catch(IOException e){
-                
+            } catch (IOException e) {
+
             }
         }
     }//GEN-LAST:event_jButton2MouseClicked
@@ -258,7 +293,7 @@ public class Inicio extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Se ha guardado con éxito");
         } catch (IOException ex) {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
-        }      
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -269,24 +304,22 @@ public class Inicio extends javax.swing.JFrame {
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // Botón analizar
-        Archivos archivo = new Archivos();
+
         String resultado = "";
         try {
             // analizador lexico
-            resultado = archivo.analizadorLexico((String)jTextArea1.getText());
+            resultado = archivo.analizadorLexico((String) jTextArea1.getText());
         } catch (IOException ex) {
             Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
-        }     
+        }
         // analizador sintáctico
-        resultado += archivo.analizadorSintactico((String)jTextArea1.getText());
-        // seteando el text area con la info necesaria
-        jTextArea2.setText(resultado);
-        
+        resultado += archivo.analizadorSintactico((String) jTextArea1.getText());
+
         // lógica de las evaluaciones de las expresiones regulares
         if (resultado.contains("Análisis realizado correctamente.")) {
-            System.out.println("sisoi ggggg");
             AST arbol;
-            for(ExpresionRegular exp : archivo.expresionesRegulares) {
+            resultado += "\nAUTOMATAS\n";
+            for (ExpresionRegular exp : archivo.expresionesRegulares) {
                 // primer reporte (arbol sintactico)
                 arbol = new AST(exp.nombreVariable);
                 arbol.regex(exp.expresionRegular);
@@ -301,21 +334,134 @@ public class Inicio extends javax.swing.JFrame {
                 // automata AFD 
                 AFD afd = new AFD(exp.nombreVariable);
                 afd.tablaTransiciones(arbol.tablaTransiciones);
-                //afd.introRegex(archivo.conjuntos);
+                afd.introRegex(archivo.conjuntos);
                 afd.graphviz();
+                this.afds.add(afd);
                 // automata AFN (Thompson)
                 AFN afn = new AFN(exp.nombreVariable);
                 afn.recorridoAST(arbol.raiz);
                 afn.addInicio();
                 afn.graphviz();
+                resultado += "Autómata finito determinista de " + exp.nombreVariable + " creado con éxito.\n";
             }
+            // por último validamos las cadenas mediante los autómatas creados
+            boolean esAceptado;
+            for (RegExpEvaluar evaluacion : archivo.evaluaciones) {
+                evaluacion.cadena = evaluacion.cadena.replace("\\\"", "");
+                for (AFD automata : this.afds) {
+                    esAceptado = automata.evaluar(evaluacion);
+                    if (esAceptado) {
+                        evaluacion.matchCon = automata.nombreRegex;
+                        evaluacion.esAceptado = true;
+                        break;
+                    } else {
+                        evaluacion.esAceptado = false;
+                    }
+                }
+            }
+            // craeando el reporte de las salidas mediante json
+            resultado += "\nRESULTADOS\n";
+            String json = "";
+            int i = 1;
+            for (RegExpEvaluar evaluacion : archivo.evaluaciones) {
+                json += "   {\n";
+                json += "       \"Valor\":\"" + evaluacion.cadena + "\",\n";
+                if (evaluacion.esAceptado) {
+                    json += "       \"ExpresionRegular\":\"" + evaluacion.matchCon + "\",\n";
+                    json += "       \"Resultado\":\"Cadena válida\"\n";
+                    resultado += "La expresion: \"" + evaluacion.cadena + "\", es válida con la expresion regular: " + evaluacion.matchCon + "\n\n";
+                } else {
+                    json += "       \"ExpresionRegular\":\"No aplica\",\n";
+                    json += "       \"Resultado\":\"Cadena inválida\"\n";
+                    resultado += "La expresion: \"" + evaluacion.cadena + "\", NO es válida con ninguna expresion regular\n\n";
+                }
+                if (i != archivo.evaluaciones.size()) {
+                    json += "   },\n";
+                } else {
+                    json += "   }\n";
+                }
+                i++;
+            }
+            archivo.crearJson(contador, json);
+            // seteando el text area con la info necesaria
+            jTextArea2.setText(resultado);
         } else {
-           // creando reportes
+            // creando reportes
             Html repErrores = new Html();
-            repErrores.reportErrores(contador, archivo.errores); 
-        }       
+            repErrores.reportErrores(contador, archivo.errores);
+        }
         contador++;
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        // TODO add your handling code here:
+        this.siguiente++;
+        System.out.println(siguiente);
+        if (siguiente == archivo.expresionesRegulares.size()) {
+            this.siguiente = 0;
+        }
+        String ruta = "REPORTES/";
+        switch (imagenes.getSelectedIndex()) {
+            case 0:
+                // AFD
+                ruta += "AFD_202000166/" + archivo.expresionesRegulares.get(this.siguiente).nombreVariable + ".png";
+                mostrarImagen(ruta);
+                break;
+            case 1:
+                // AFN
+                ruta += "AFND_202000166/" + archivo.expresionesRegulares.get(this.siguiente).nombreVariable + ".png";
+                mostrarImagen(ruta);
+                break;
+            case 2:
+                // ARBOLES
+                ruta += "ARBOLES_202000166/" + archivo.expresionesRegulares.get(this.siguiente).nombreVariable + ".png";
+                mostrarImagen(ruta);
+                break;
+            default:
+                break;
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void imagenesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_imagenesActionPerformed
+        // TODO add your handling code here:       
+        String ruta = "REPORTES/";
+        try {
+            switch (imagenes.getSelectedIndex()) {
+                case 0:
+                    // AFD
+                    ruta += "AFD_202000166/" + archivo.expresionesRegulares.get(0).nombreVariable + ".png";
+                    mostrarImagen(ruta);
+                    break;
+                case 1:
+                    // AFN
+                    ruta += "AFND_202000166/" + archivo.expresionesRegulares.get(0).nombreVariable + ".png";
+                    mostrarImagen(ruta);
+                    break;
+                case 2:
+                    // ARBOLES
+                    ruta += "ARBOLES_202000166/" + archivo.expresionesRegulares.get(0).nombreVariable + ".png";
+                    mostrarImagen(ruta);
+                    break;
+                default:
+                    break;
+            }
+        } catch(Exception e) {
+            // seteando el text area con la info necesaria
+            jTextArea2.setText("Error al mostrar la imagen. Debería de analizar algún archivo primero.");
+        }
+
+    }//GEN-LAST:event_imagenesActionPerformed
+
+    void mostrarImagen(String ruta) {
+        ImageIcon imagen = new ImageIcon(ruta);
+        ImageIcon icono = new ImageIcon(
+                imagen.getImage().getScaledInstance(this.imagenLabel.getWidth(),
+                        this.imagenLabel.getHeight(),
+                        Image.SCALE_DEFAULT)
+        );
+        this.imagenLabel.setIcon(icono);
+        this.repaint();
+    }
 
     /**
      * @param args the command line arguments
@@ -353,16 +499,18 @@ public class Inicio extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel imagenLabel;
+    private javax.swing.JComboBox<String> imagenes;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;

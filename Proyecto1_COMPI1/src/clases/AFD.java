@@ -6,27 +6,28 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class AFD {
+
     // aquí estarán todos los estados
     ArrayList<Estado> estados;
-    String nombreRegex;
-    
+    public String nombreRegex;
+
     public AFD(String nombreRegex) {
         this.nombreRegex = nombreRegex;
         this.estados = new ArrayList<>();
     }
-    
+
     public void tablaTransiciones(ArrayList<Transicion> tablaTransiciones) {
         // primero agregamos todos los estados al array
         int id = 0;
-        for(Transicion transicion : tablaTransiciones) {
+        for (Transicion transicion : tablaTransiciones) {
             estados.add(new Estado(id, transicion.estado, transicion.esAceptacion));
             id++;
         }
         // ahora enlazamos cada trancisicion con un estado
-        for(Estado estado : this.estados) {
-            for(Transicion transicion : tablaTransiciones) {
-                for(Hoja hoja : transicion.transiciones) {
-                    if(estado.nombreEstado.equals(transicion.estado)) {
+        for (Estado estado : this.estados) {
+            for (Transicion transicion : tablaTransiciones) {
+                for (Hoja hoja : transicion.transiciones) {
+                    if (estado.nombreEstado.equals(transicion.estado)) {
                         // si es el nombre del estado igual que la transicion añadimos dicha trasicion
                         estado.add(hoja, this.estados);
                     } else {
@@ -35,24 +36,75 @@ public class AFD {
                     }
                 }
             }
-        }               
+        }
     }
-    
+
     // función para añadir los conjuntos definidos
     public void introRegex(ArrayList<Conjunto> conjuntos) {
-        for(Estado estado : this.estados) {
-            for(TransicionEstado transicion : estado.transiciones) {
-                for(Conjunto conjunto : conjuntos) {
-                    if(transicion.nombreRegex.contains(conjunto.nombreVariable)) {
-                        
-                    } else if(transicion.nombreRegex.contains("\"")) {
-                        
+        for (Estado estado : this.estados) {
+            for (TransicionEstado transicion : estado.transiciones) {
+                for (Conjunto conjunto : conjuntos) {
+                    if (transicion.nombreRegex.contains(conjunto.nombreVariable)) {
+                        transicion.rango = conjunto.rango;
+                        break;
+                    } else if (transicion.nombreRegex.contains("\"")) {
+                        transicion.rango = new String[1];
+                        transicion.rango[0] = transicion.nombreRegex.replace("\\\"", "");
+                        break;
                     }
                 }
             }
         }
     }
-    
+
+    public boolean evaluar(RegExpEvaluar valor) {
+        String estadoActual = "S0";
+        // recorriendo el string
+        for (char c : valor.cadena.toCharArray()) {
+            valor.esAceptado = false;
+            // recorriendo los estados
+            for (Estado estado : this.estados) {
+                if (estado.nombreEstado.equals(estadoActual)) {
+                    // recorriendo las transiciones
+                    for (TransicionEstado transicion : estado.transiciones) {
+                        // en este caso tiene que dar match con los posibles carateres
+                        if (transicion.rango.length == 1 || transicion.rango.length > 2) {
+                            for (String r : transicion.rango) {
+                                char rc = r.charAt(0);
+                                if (rc == c) {
+                                    valor.esAceptado = true;
+                                    estadoActual = transicion.estadoDestino.nombreEstado;
+                                    break;
+                                }
+                            }
+                            // en este caso tiene que da match con el rango que esta encerrado entre los dos caracteres    
+                        } else {
+                            int inferior = transicion.rango[0].charAt(0);
+                            int superior = transicion.rango[1].charAt(0);
+                            if ((int) c >= inferior && (int) c <= superior) {
+                                valor.esAceptado = true;
+                                estadoActual = transicion.estadoDestino.nombreEstado;
+                                break;
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+            if (!valor.esAceptado) {
+                return false;
+            }
+        }
+        if (valor.esAceptado) {
+            for (Estado estado : this.estados) {
+                if (estadoActual.equals(estado.nombreEstado)) {
+                    return estado.esAceptacion;
+                }
+            }
+        }
+        return false;
+    }
+
     // ============= GRAPHVIZ ==============
     public void crearDot(String cadena, String ruta) {
         FileWriter fichero = null;
@@ -72,7 +124,7 @@ public class AFD {
             }
         }
     }
-    
+
     // método para graficar con graphviz
     public void graphviz() {
         String cadena = "digraph automata {\n";
@@ -92,31 +144,31 @@ public class AFD {
         } catch (Exception e) {
         }
     }
-    
+
     public String nodosGraphviz() {
         String cadena = "";
-        for(Estado estado : this.estados) {
-            if(estado.esAceptacion) {
-               cadena += estado.nombreEstado + "[shape=\"doublecircle\"];\n"; 
+        for (Estado estado : this.estados) {
+            if (estado.esAceptacion) {
+                cadena += estado.nombreEstado + "[shape=\"doublecircle\"];\n";
             } else {
-               cadena += estado.nombreEstado + "[shape=\"circle\"];\n"; 
-            }            
+                cadena += estado.nombreEstado + "[shape=\"circle\"];\n";
+            }
         }
         return cadena;
     }
-    
+
     public String enlazarGraphviz() {
         String cadena = "", repetido = "inicio";
-        for(Estado estado : this.estados) {
-            for(TransicionEstado transicion : estado.transiciones) {
+        for (Estado estado : this.estados) {
+            for (TransicionEstado transicion : estado.transiciones) {
                 // si la transicion es hacia el mismo estado pero con otra hoja, solo los separamos por |
-                if(repetido.equals(transicion.estadoDestino.nombreEstado)) {
+                if (repetido.equals(transicion.estadoDestino.nombreEstado)) {
                     cadena += "|" + transicion.nombreRegex;
-                // si es el inicio del automata lo enlazamos con el nodo inicio
-                } else if(repetido.equals("inicio")) {
+                    // si es el inicio del automata lo enlazamos con el nodo inicio
+                } else if (repetido.equals("inicio")) {
                     cadena += "ini->" + estado.nombreEstado + ";\n";
                     cadena += estado.nombreEstado + "->" + transicion.estadoDestino.nombreEstado + "[label=\"" + transicion.nombreRegex;
-                // si es a diferente estado, lo enlazamos con el nuevo estado 
+                    // si es a diferente estado, lo enlazamos con el nuevo estado 
                 } else {
                     cadena += "\"];\n" + estado.nombreEstado + "->" + transicion.estadoDestino.nombreEstado + "[label=\"" + transicion.nombreRegex;
                 }
@@ -130,21 +182,22 @@ public class AFD {
 }
 
 class Estado {
+
     int id;
     String nombreEstado;
     boolean esAceptacion;
     ArrayList<TransicionEstado> transiciones;
-    
+
     public Estado(int id, String nombreEstado, boolean esAceptacion) {
         this.id = id;
         this.nombreEstado = nombreEstado;
         this.esAceptacion = esAceptacion;
         this.transiciones = new ArrayList<>();
     }
-    
+
     public void add(Hoja hoja, ArrayList<Estado> estados) {
-        for(Estado estado : estados) {
-            if(hoja.estado.equals(estado.nombreEstado)) {
+        for (Estado estado : estados) {
+            if (hoja.estado.equals(estado.nombreEstado)) {
                 this.transiciones.add(new TransicionEstado(hoja.nombre, estado));
             }
         }
@@ -152,13 +205,14 @@ class Estado {
 }
 
 class TransicionEstado {
+
     String nombreRegex;
-    String regex;
+    String[] rango;
     Estado estadoDestino;
 
     public TransicionEstado(String nombreRegex, Estado estadoDestino) {
         this.nombreRegex = nombreRegex;
         this.estadoDestino = estadoDestino;
-        this.regex = "";
+        this.rango = null;
     }
 }

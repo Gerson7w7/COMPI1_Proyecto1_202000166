@@ -11,8 +11,7 @@ S6[shape="circle"];
 S7[shape="circle"];
 S8[shape="circle"];
 S9[shape="circle"];
-S10[shape="circle"];
-S11[shape="doublecircle"];
+S10[shape="doublecircle"];
 
 ini->S0;
 S0->S1[label="{digito}"];
@@ -24,6 +23,5 @@ S5->S6[label="\"/\""];
 S6->S7[label="{digito}"];
 S7->S8[label="{digito}"];
 S8->S9[label="{digito}"];
-S9->S10[label="{digito}"];
-S10->S11[label="{digito}"]
+S9->S10[label="{digito}"]
 }

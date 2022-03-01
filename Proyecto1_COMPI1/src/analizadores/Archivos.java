@@ -7,6 +7,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java_cup.runtime.Symbol;
 import clases.Error;
+import java.io.PrintWriter;
 
 public class Archivos {
 
@@ -18,6 +19,28 @@ public class Archivos {
     public ArrayList<RegExpEvaluar> evaluaciones = new ArrayList<>();
     
     public Archivos() {
+    }
+    
+    // ============= guardar json ==============
+    public void crearJson(int numero, String cadena) {
+        FileWriter fichero = null;
+        PrintWriter pw = null;
+
+        try {
+            fichero = new FileWriter("REPORTES/SALIDAS_202000166/" + numero + ".json");
+            pw = new PrintWriter(fichero);
+            pw.write("[\n");
+            pw.write(cadena);
+            pw.write("]");
+            pw.close();
+            fichero.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } finally {
+            if (pw != null) {
+                pw.close();
+            }
+        }
     }
 
     public void nuevo(String ruta) throws IOException {
@@ -192,7 +215,7 @@ public class Archivos {
         Sintax s = new Sintax(new analizadores.LexerCup(new StringReader(expr)));  
         try {            
             s.parse();         
-            return "Análisis realizado correctamente.";
+            return "Análisis realizado correctamente.\n";
         } catch (Exception ex) {   
             Symbol sym = s.getS();
             String descripcion = "El componente \"" + sym.value + "\" no se esperaba.";
