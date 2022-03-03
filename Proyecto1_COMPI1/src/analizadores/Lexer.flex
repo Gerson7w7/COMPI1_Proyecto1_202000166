@@ -8,7 +8,7 @@ NUMERO = [0-9]+([.][0-9]+)?
 IGNORAR = [ ,\t,\r]+
 COMENTARIOS = "<!"(.|\n)*"!>"|"//".*
 STRING = \"[^\"]*\"
-RANGO = ."~".|.(",".)+
+RANGO = (."~".)|(.(",".)+)|(.(", ".)+) 
 %{
     public String lexeme;
 %}

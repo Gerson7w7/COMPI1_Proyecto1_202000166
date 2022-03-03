@@ -50,6 +50,8 @@ public class AFD {
                     } else if (transicion.nombreRegex.contains("\"")) {
                         transicion.rango = new String[1];
                         transicion.rango[0] = transicion.nombreRegex.replace("\\\"", "");
+                        transicion.rango[0] = transicion.rango[0].replace("\\\'", "\'");
+                        transicion.rango[0] = transicion.rango[0].replace("\\n", "\n");
                         break;
                     }
                 }
@@ -59,8 +61,21 @@ public class AFD {
 
     public boolean evaluar(RegExpEvaluar valor) {
         String estadoActual = "S0";
+        String caracterEspecial = "";
         // recorriendo el string
         for (char c : valor.cadena.toCharArray()) {
+            if(c == '\\') {
+                caracterEspecial += "\\"; 
+                continue;
+            } else if(caracterEspecial.equals("\\")) {
+                caracterEspecial += c;
+                if(caracterEspecial.equals("\\\'")) {
+                    c = '\'';
+                } else if(caracterEspecial.equals("\\n")) {
+                    c = '\n';
+                }
+                caracterEspecial = "";
+            }
             valor.esAceptado = false;
             // recorriendo los estados
             for (Estado estado : this.estados) {
@@ -70,7 +85,24 @@ public class AFD {
                         // en este caso tiene que dar match con los posibles carateres
                         if (transicion.rango.length == 1 || transicion.rango.length > 2) {
                             for (String r : transicion.rango) {
-                                char rc = r.charAt(0);
+                                char rc;
+                                switch (r) {
+                                    case "\n":
+                                        rc = '\n';
+                                        break;
+                                    case "\'":
+                                        rc = '\'';
+                                        break;
+                                    case "\"":
+                                        rc = '\"';
+                                        break;
+                                    case "":
+                                        rc = ' ';
+                                        break;
+                                    default:
+                                        rc = r.charAt(0);
+                                        break;
+                                }
                                 if (rc == c) {
                                     valor.esAceptado = true;
                                     estadoActual = transicion.estadoDestino.nombreEstado;

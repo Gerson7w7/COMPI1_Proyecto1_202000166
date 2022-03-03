@@ -2,7 +2,7 @@ digraph arbol {
 n1[shape="record" label="1| . |5"]
 n3[shape="record" label="1| . |1,2,3,4"]
 n4[shape="record" label="1| {letra} |1"]
-n5[shape="record" label="2,3,4| * |2,3,4"]
+n5[shape="record" label="2,3,4| ? |2,3,4"]
 n6[shape="record" label="2,3,4| or |2,3,4"]
 n7[shape="record" label="2| \"_\" |2"]
 n8[shape="record" label="3,4| or |3,4"]

@@ -86,7 +86,7 @@ public class Archivos {
                     columna += lexer.yylength();
                     break;
                 case LlaveCierre:
-                    regex += lexer.lexeme + "-";
+                    regex += lexer.lexeme + "ª";
                     columna += lexer.yylength();
                     break;
                 case Conjunto:
@@ -132,7 +132,7 @@ public class Archivos {
                         conjuntos.add(conjunto);
                     } else if (flag.equals("EXPRESION REGULAR")) {
                         regex = regex.replace(expresionRegular.nombreVariable, "");
-                        String aux[] = regex.split("-");
+                        String aux[] = regex.split("ª");
                         expresionRegular.expresionRegular = aux;
                         expresionesRegulares.add(expresionRegular);
                     } else if (flag.equals("EVALUACION")) {
@@ -144,18 +144,18 @@ public class Archivos {
                     columna += lexer.yylength();
                     break;
                 case Punto:
-                    regex += lexer.lexeme + "-";
+                    regex += lexer.lexeme + "ª";
                     columna += lexer.yylength();
                     break;
                 case Asterisco:
-                    regex += lexer.lexeme + "-";
+                    regex += lexer.lexeme + "ª";
                     columna += lexer.yylength();
                     break;
                 case Comilla:
                     columna += lexer.yylength();
                     break;
                 case Barra:
-                    regex += lexer.lexeme + "-";
+                    regex += lexer.lexeme + "ª";
                     columna += lexer.yylength();
                     break;
                 case Negativo:
@@ -176,11 +176,11 @@ public class Archivos {
                     columna += lexer.yylength();
                     break;
                 case Mas:
-                    regex += lexer.lexeme + "-";
+                    regex += lexer.lexeme + "ª";
                     columna += lexer.yylength();
                     break;
                 case Interrogacion:
-                    regex += lexer.lexeme + "-";
+                    regex += lexer.lexeme + "ª";
                     columna += lexer.yylength();
                     break;
                 case Coma:
@@ -192,7 +192,7 @@ public class Archivos {
                 case Cadena:
                     lexer.lexeme = lexer.lexeme.replace("\\\"", "\"");
                     lexer.lexeme = lexer.lexeme.replace("\"", "\\\"");   
-                    regex += lexer.lexeme + "-";
+                    regex += lexer.lexeme + "ª";
                     if (flag.equals("EVALUACION")) {
                         regExpEvaluar.cadena = lexer.lexeme;                                         
                     }

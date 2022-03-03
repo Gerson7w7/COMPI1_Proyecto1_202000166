@@ -235,7 +235,7 @@ public class AST {
         html.reportTransicion(this.nombreRegex, this.tablaTransiciones);
     }
 
-    public void recorridoTransiciones(Transicion transicion) {
+    public boolean recorridoTransiciones(Transicion transicion) {
         for (Siguiente siguiente : this.tablaSiguientes) {
             // si en contenido de la transicion contiene una hoja del siguiente, se guarda una nueva transicion
             if (transicion.contenido.contains(siguiente.identificador)) {
@@ -258,48 +258,60 @@ public class AST {
             }
         }
         nuevaTransicion(transicion);
+        return true;
     }
 
-    public void nuevaTransicion(Transicion transicion) {
+    public boolean nuevaTransicion(Transicion transicion) {
         boolean nuevoEstado = false;
         ArrayList<Integer> contenido = null;
         // recorriendo cada transicion
         for (int i = 0; i < this.tablaTransiciones.size(); i++) {
-            for (int j = 0; j < this.tablaTransiciones.size(); j++) {
-                // recorriendo cada hoja de la transicion que acabamos de completar
-                for (Hoja hoja : this.tablaTransiciones.get(j).transiciones) {
+            for (Hoja hoja : this.tablaTransiciones.get(i).transiciones) {
+                for (int j = 0; j < this.tablaTransiciones.size(); j++) {
+                    // recorriendo cada hoja de la transicion que acabamos de completar
                     if (hoja.contenido != null) {
                         // guardaremos el contenido de la hoja y dependiendo si es un estado nuevo o no, lo usaremos o no
-                        nuevoEstado = !this.tablaTransiciones.get(i).contenido.containsAll(hoja.contenido);
+                        ArrayList<Integer> auxContenido = this.tablaTransiciones.get(j).contenido;
+                        if (!hoja.contenido.containsAll(auxContenido) || !auxContenido.containsAll(hoja.contenido)) {
+                            nuevoEstado = true;
+                        } else {
+                            nuevoEstado = false;
+                            break;
+                        }
                         contenido = hoja.contenido;
                     }
                 }
+                // si hay un estado nuevo, crearemos una nueva transicion
+                if (nuevoEstado) {
+                    int nEstado = this.tablaTransiciones.size();
+                    Transicion estado = new Transicion("S" + nEstado, contenido, this.tablaSiguientes);
+                    if (contenido.contains(this.tablaSiguientes[this.tablaSiguientes.length - 1].identificador)) {
+                        // verificamos si se trata de un estado de aceptacion
+                        estado.esAceptacion = true;
+                    }
+                    this.tablaTransiciones.add(estado);
+                    this.recorridoTransiciones(this.tablaTransiciones.get(this.tablaTransiciones.size() - 1));
+                    return true;
+                }
             }
         }
-        // si hay un estado nuevo, crearemos una nueva transicion
-        if (nuevoEstado) {
-            int nEstado = this.tablaTransiciones.size();
-            Transicion estado = new Transicion("S" + nEstado, contenido, this.tablaSiguientes);
-            if (contenido.contains(this.tablaSiguientes[this.tablaSiguientes.length - 1].identificador)) {
-                // verificamos si se trata de un estado de aceptacion
-                estado.esAceptacion = true;
-            }
-            this.tablaTransiciones.add(estado);
-            this.recorridoTransiciones(this.tablaTransiciones.get(this.tablaTransiciones.size() - 1));
-        } else {
-            // por último, ponemos el nombre de los estados de cada transicon
+        if (!nuevoEstado) {
+            // por último, ponemos el nombre de los estados de cada transicion
             for (Transicion t1 : this.tablaTransiciones) {
-                for (Transicion t2 : this.tablaTransiciones) {
-                    for (Hoja h : t2.transiciones) {
+                for (Hoja h : t1.transiciones) {
+                    for (Transicion t2 : this.tablaTransiciones) {
                         if (h.contenido != null) {
-                            if (h.contenido.containsAll(t1.contenido)) {
-                                h.estado = t1.estado;
+                            if (h.contenido.containsAll(t2.contenido) && t2.contenido.containsAll(h.contenido)) {
+                                h.estado = t2.estado;
                             }
+                        } else {
+                            break;
                         }
                     }
                 }
             }
         }
+        return true;
     }
 
     // ============= GRAPHVIZ ==============

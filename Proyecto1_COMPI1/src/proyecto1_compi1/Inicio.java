@@ -292,7 +292,7 @@ public class Inicio extends javax.swing.JFrame {
             fileWriter.close();
             JOptionPane.showMessageDialog(null, "Se ha guardado con éxito");
         } catch (IOException ex) {
-            Logger.getLogger(Inicio.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Error. No se ha abierto ningún archivo.");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -314,7 +314,8 @@ public class Inicio extends javax.swing.JFrame {
         }
         // analizador sintáctico
         resultado += archivo.analizadorSintactico((String) jTextArea1.getText());
-
+        // seteando el text area con la info necesaria
+        jTextArea2.setText(resultado);
         // lógica de las evaluaciones de las expresiones regulares
         if (resultado.contains("Análisis realizado correctamente.")) {
             AST arbol;
