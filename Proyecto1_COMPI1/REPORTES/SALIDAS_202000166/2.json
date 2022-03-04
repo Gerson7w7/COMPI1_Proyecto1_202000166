@@ -1,61 +1,91 @@
 [
    {
-       "Valor":"\'cadena entre comilla simple\'",
+       "Valor":"primerLexemaCokoa",
        "ExpresionRegular":"No aplica",
        "Resultado":"Cadena inválida"
    },
    {
-       "Valor":"P-385fde",
-       "ExpresionRegular":"No aplica",
-       "Resultado":"Cadena inválida"
-   },
-   {
-       "Valor":"P388fdc",
-       "ExpresionRegular":"Pl",
+       "Valor":"holasoyunacadenavalida",
+       "ExpresionRegular":"ExpReg1",
        "Resultado":"Cadena válida"
    },
    {
-       "Valor":"P38df8c",
-       "ExpresionRegular":"No aplica",
-       "Resultado":"Cadena inválida"
-   },
-   {
-       "Valor":"P-38df8k",
-       "ExpresionRegular":"No aplica",
-       "Resultado":"Cadena inválida"
-   },
-   {
-       "Valor":"K-385ffk",
-       "ExpresionRegular":"No aplica",
-       "Resultado":"Cadena inválida"
-   },
-   {
-       "Valor":"\'cadena entre comilla simple\'",
-       "ExpresionRegular":"No aplica",
-       "Resultado":"Cadena inválida"
-   },
-   {
-       "Valor":"P-385fde",
-       "ExpresionRegular":"No aplica",
-       "Resultado":"Cadena inválida"
-   },
-   {
-       "Valor":"P388fdc",
-       "ExpresionRegular":"Pl",
+       "Valor":"34.44",
+       "ExpresionRegular":"ExpresionReg2",
        "Resultado":"Cadena válida"
    },
    {
-       "Valor":"P38df8c",
+       "Valor":"3455",
        "ExpresionRegular":"No aplica",
        "Resultado":"Cadena inválida"
    },
    {
-       "Valor":"P-38df8k",
+       "Valor":"correoelectronico@gmail.com",
+       "ExpresionRegular":"correo",
+       "Resultado":"Cadena válida"
+   },
+   {
+       "Valor":"correoelectronico@gmail.454",
        "ExpresionRegular":"No aplica",
        "Resultado":"Cadena inválida"
    },
    {
-       "Valor":"K-385ffk",
+       "Valor":"correoel@ctronico@gmail.com",
+       "ExpresionRegular":"No aplica",
+       "Resultado":"Cadena inválida"
+   },
+   {
+       "Valor":"18/10/2000",
+       "ExpresionRegular":"fecha",
+       "Resultado":"Cadena válida"
+   },
+   {
+       "Valor":"18//10//2000",
+       "ExpresionRegular":"No aplica",
+       "Resultado":"Cadena inválida"
+   },
+   {
+       "Valor":"primerLexemaCokoa",
+       "ExpresionRegular":"No aplica",
+       "Resultado":"Cadena inválida"
+   },
+   {
+       "Valor":"holasoyunacadenavalida",
+       "ExpresionRegular":"ExpReg1",
+       "Resultado":"Cadena válida"
+   },
+   {
+       "Valor":"34.44",
+       "ExpresionRegular":"ExpresionReg2",
+       "Resultado":"Cadena válida"
+   },
+   {
+       "Valor":"3455",
+       "ExpresionRegular":"No aplica",
+       "Resultado":"Cadena inválida"
+   },
+   {
+       "Valor":"correoelectronico@gmail.com",
+       "ExpresionRegular":"correo",
+       "Resultado":"Cadena válida"
+   },
+   {
+       "Valor":"correoelectronico@gmail.454",
+       "ExpresionRegular":"No aplica",
+       "Resultado":"Cadena inválida"
+   },
+   {
+       "Valor":"correoel@ctronico@gmail.com",
+       "ExpresionRegular":"No aplica",
+       "Resultado":"Cadena inválida"
+   },
+   {
+       "Valor":"18/10/2000",
+       "ExpresionRegular":"fecha",
+       "Resultado":"Cadena válida"
+   },
+   {
+       "Valor":"18//10//2000",
        "ExpresionRegular":"No aplica",
        "Resultado":"Cadena inválida"
    }
