@@ -46,6 +46,8 @@ public class AFD {
                 for (Conjunto conjunto : conjuntos) {
                     if (transicion.nombreRegex.contains(conjunto.nombreVariable)) {
                         transicion.rango = conjunto.rango;
+                        if(conjunto.esRango)
+                            transicion.esRango = true;
                         break;
                     } else if (transicion.nombreRegex.contains("\"")) {
                         transicion.rango = new String[1];
@@ -83,7 +85,7 @@ public class AFD {
                     // recorriendo las transiciones
                     for (TransicionEstado transicion : estado.transiciones) {
                         // en este caso tiene que dar match con los posibles carateres
-                        if (transicion.rango.length == 1 || transicion.rango.length > 2) {
+                        if (!transicion.esRango) {
                             for (String r : transicion.rango) {
                                 char rc;
                                 switch (r) {
@@ -241,10 +243,12 @@ class TransicionEstado {
     String nombreRegex;
     String[] rango;
     Estado estadoDestino;
-
+    boolean esRango;
+    
     public TransicionEstado(String nombreRegex, Estado estadoDestino) {
         this.nombreRegex = nombreRegex;
         this.estadoDestino = estadoDestino;
         this.rango = null;
+        this.esRango = false;
     }
 }

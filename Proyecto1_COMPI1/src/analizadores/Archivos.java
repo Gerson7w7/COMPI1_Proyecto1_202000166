@@ -120,8 +120,10 @@ public class Archivos {
                     if (flag.equals("CONJUNTO") && conjunto != null) {
                         if(lexer.lexeme.contains("~")) {
                             conjunto.rango = lexer.lexeme.split("~");
+                            conjunto.esRango = true;
                         } else if(lexer.lexeme.contains(",")) {
                             conjunto.rango = lexer.lexeme.split(",");
+                            conjunto.esRango = false;
                         }
                     }
                     

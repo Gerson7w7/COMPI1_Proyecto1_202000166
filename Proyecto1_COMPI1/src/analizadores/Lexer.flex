@@ -6,9 +6,9 @@ import static analizadores.Tokens.*;
 ALFANUMERICO = ([A-Za-z_])[A-Za-z0-9_]+
 NUMERO = [0-9]+([.][0-9]+)?
 IGNORAR = [ ,\t,\r]+
-COMENTARIOS = "<!"(.|\n)*"!>"|"//".*
+COMENTARIOS = "<!"[^"!>"]*"!>"|"//".*
 STRING = \"[^\"]*\"
-RANGO = (."~".)|(.(",".)+)|(.(", ".)+) 
+RANGO = (."~".)|(.(",".)+)|(.(", ".)+)
 %{
     public String lexeme;
 %}

@@ -1,4 +1,3 @@
-
 package clases;
 
 import java.io.FileWriter;
@@ -7,49 +6,50 @@ import java.io.PrintWriter;
 import java.util.Stack;
 
 public class AFN {
+
     String nombreRegex;
     public NodoAFN inicio;
     // estas estructuras nos ayudarán a armar el autómata
     public Stack<String> hojas;
     public Stack<NodoAFN[]> conjuntos;
     int contador = 1;
-    
+
     public AFN(String nombreRegex) {
         this.nombreRegex = nombreRegex;
         this.inicio = new NodoAFN("S0", "");
         this.hojas = new Stack();
         this.conjuntos = new Stack();
-    }    
-    
-    public void addInicio() {       
+    }
+
+    public void addInicio() {
         this.inicio.estadoSiguiente1 = this.conjuntos.pop()[0];
     }
-    
+
     // método para recorrer el arbol ast postorder
     public void recorridoAST(Nodo aux) {
-        if(aux != null){          
+        if (aux != null) {
             this.recorridoAST(aux.izquierda);
             this.recorridoAST(aux.derecha);
             add(aux);
-        }     
+        }
     }
-    
+
     // aqui agregaremos los nodos del afn
     public void add(Nodo nodo) {
-        if(nodo.tipo.equals("hoja")) {
+        if (nodo.tipo.equals("hoja")) {
             // agregando a la pila las hojas
             this.hojas.push(nodo.dato);
-        } else if(nodo.dato.equals("+")) {
+        } else if (nodo.dato.equals("+")) {
             // si su hijo es una hoja lo enlazamos con la hoja
-            if(nodo.izquierda.tipo.equals("hoja")) {
+            if (nodo.izquierda.tipo.equals("hoja")) {
                 // obtenemos la hoja que esta en el top
                 String hoja1 = this.hojas.pop();
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
-                NodoAFN nodo2 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 NodoAFN nodo3 = new NodoAFN("S" + contador, hoja1);
                 this.contador++;
-                NodoAFN nodo4 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo4 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 // enlazando
                 nodo3.estadoSiguiente1 = nodo2;
@@ -57,12 +57,12 @@ public class AFN {
                 nodo2.estadoSiguiente1 = nodo3;
                 NodoAFN[] aux = {nodo2, nodo4};
                 this.conjuntos.push(aux);
-            // sino lo enlazamos con un conjunto    
+                // sino lo enlazamos con un conjunto    
             } else {
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
-                NodoAFN nodo2 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo4 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo4 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 // enlazando
                 NodoAFN[] conjunto = this.conjuntos.pop();
@@ -72,19 +72,19 @@ public class AFN {
                 NodoAFN[] aux = {nodo2, nodo4};
                 this.conjuntos.push(aux);
             }
-        } else if(nodo.dato.equals("?")) {
+        } else if (nodo.dato.equals("?")) {
             // si su hijo es una hoja lo enlazamos con la hoja
-            if(nodo.izquierda.tipo.equals("hoja")) {
+            if (nodo.izquierda.tipo.equals("hoja")) {
                 // obtenemos la hoja que esta en el top
                 String hoja1 = this.hojas.pop();
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
-                NodoAFN nodo1 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo1 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo2 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 NodoAFN nodo3 = new NodoAFN("S" + contador, hoja1);
                 this.contador++;
-                NodoAFN nodo4 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo4 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 // enlazando
                 nodo3.estadoSiguiente2 = nodo4;
@@ -93,14 +93,14 @@ public class AFN {
                 nodo1.estadoSiguiente2 = nodo4;
                 NodoAFN[] aux = {nodo1, nodo4};
                 this.conjuntos.push(aux);
-            // sino lo enlazamos con un conjunto    
+                // sino lo enlazamos con un conjunto    
             } else {
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
-                NodoAFN nodo1 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo1 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo2 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo4 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo4 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 // enlazando
                 NodoAFN[] conjunto = this.conjuntos.pop();
@@ -111,19 +111,19 @@ public class AFN {
                 NodoAFN[] aux = {nodo1, nodo4};
                 this.conjuntos.push(aux);
             }
-        } else if(nodo.dato.equals("*")) {
+        } else if (nodo.dato.equals("*")) {
             // si su hijo es una hoja lo enlazamos con la hoja
-            if(nodo.izquierda.tipo.equals("hoja")) {
+            if (nodo.izquierda.tipo.equals("hoja")) {
                 // obtenemos la hoja que esta en el top
                 String hoja1 = this.hojas.pop();
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
-                NodoAFN nodo1 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo1 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo2 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 NodoAFN nodo3 = new NodoAFN("S" + contador, hoja1);
                 this.contador++;
-                NodoAFN nodo4 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo4 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 // enlazando
                 nodo3.estadoSiguiente1 = nodo2;
@@ -133,14 +133,14 @@ public class AFN {
                 nodo1.estadoSiguiente2 = nodo4;
                 NodoAFN[] aux = {nodo1, nodo4};
                 this.conjuntos.push(aux);
-            // sino lo enlazamos con un conjunto    
+                // sino lo enlazamos con un conjunto    
             } else {
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
-                NodoAFN nodo1 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo1 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo2 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo4 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo4 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 // enlazando
                 NodoAFN[] conjunto = this.conjuntos.pop();
@@ -152,9 +152,9 @@ public class AFN {
                 NodoAFN[] aux = {nodo1, nodo4};
                 this.conjuntos.push(aux);
             }
-        } else if(nodo.dato.equals(".")) {
+        } else if (nodo.dato.equals(".")) {
             // si los 2 hijos son hojas se enlazan simple
-            if(nodo.derecha.tipo.equals("hoja") && nodo.izquierda.tipo.equals("hoja")) {
+            if (nodo.derecha.tipo.equals("hoja") && nodo.izquierda.tipo.equals("hoja")) {
                 // obtenemos las primeras 2 hojas que esta en el top
                 String hoja1 = this.hojas.pop();
                 String hoja2 = this.hojas.pop();
@@ -162,13 +162,13 @@ public class AFN {
                 NodoAFN nodo2 = new NodoAFN("S" + contador, hoja1);
                 this.contador++;
                 NodoAFN nodo3 = new NodoAFN("S" + contador, hoja2);
-                this.contador++;                  
+                this.contador++;
                 // enlazando
                 nodo2.estadoSiguiente1 = nodo3;
                 NodoAFN[] aux = {nodo2, nodo3};
                 this.conjuntos.push(aux);
-            // si el hijo derecho es hoja y el izquierdo es un conjunto, se enlazan
-            } else if(nodo.derecha.tipo.equals("hoja") && !nodo.izquierda.tipo.equals("hoja")){
+                // si el hijo derecho es hoja y el izquierdo es un conjunto, se enlazan
+            } else if (nodo.derecha.tipo.equals("hoja") && !nodo.izquierda.tipo.equals("hoja")) {
                 // obtenemos la hoja que esta en el top
                 String hoja1 = this.hojas.pop();
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
@@ -179,9 +179,9 @@ public class AFN {
                 conjunto[1].estadoSiguiente1 = nodo2;
                 NodoAFN[] aux = {conjunto[0], nodo2};
                 this.conjuntos.push(aux);
-            // si el hijo derecho es un conjunto y el izquierdo es una hoja, se enlazan
-            } else if(!nodo.derecha.tipo.equals("hoja") && nodo.izquierda.tipo.equals("hoja")){
-               // obtenemos la hoja que esta en el top
+                // si el hijo derecho es un conjunto y el izquierdo es una hoja, se enlazan
+            } else if (!nodo.derecha.tipo.equals("hoja") && nodo.izquierda.tipo.equals("hoja")) {
+                // obtenemos la hoja que esta en el top
                 String hoja1 = this.hojas.pop();
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
                 NodoAFN nodo2 = new NodoAFN("S" + contador, hoja1);
@@ -190,9 +190,9 @@ public class AFN {
                 NodoAFN[] conjunto = this.conjuntos.pop();
                 nodo2.estadoSiguiente1 = conjunto[0];
                 NodoAFN[] aux = {nodo2, conjunto[1]};
-                this.conjuntos.push(aux); 
-            // si los dos hijos no son hojas se enlazan
-            } else if(!nodo.derecha.tipo.equals("hoja") && !nodo.izquierda.tipo.equals("hoja")){
+                this.conjuntos.push(aux);
+                // si los dos hijos no son hojas se enlazan
+            } else if (!nodo.derecha.tipo.equals("hoja") && !nodo.izquierda.tipo.equals("hoja")) {
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
                 // enlazando                    
                 NodoAFN[] conjunto1 = this.conjuntos.pop(); // mas a la derecha
@@ -201,24 +201,24 @@ public class AFN {
                 NodoAFN[] aux = {conjunto2[0], conjunto1[1]};
                 this.conjuntos.push(aux);
             }
-        } else if(nodo.dato.equals("|")) {
+        } else if (nodo.dato.equals("|")) {
             // si los 2 hijos son hojas, se enlazan simle
-            if(nodo.derecha.tipo.equals("hoja") && nodo.izquierda.tipo.equals("hoja")) {
+            if (nodo.derecha.tipo.equals("hoja") && nodo.izquierda.tipo.equals("hoja")) {
                 // obtenemos las primeras 2 hojas que esta en el top
                 String hoja1 = this.hojas.pop();
                 String hoja2 = this.hojas.pop();
                 // construimos el conjunto y lo añadimos a la cola de conjuntos
-                NodoAFN nodo1 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo1 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo2 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
-                NodoAFN nodo3 = new NodoAFN("S" + contador, "£");
-                this.contador++;                  
+                NodoAFN nodo3 = new NodoAFN("S" + contador, "epsilon");
+                this.contador++;
                 NodoAFN nodo4 = new NodoAFN("S" + contador, hoja1);
                 this.contador++;
                 NodoAFN nodo5 = new NodoAFN("S" + contador, hoja2);
                 this.contador++;
-                NodoAFN nodo6 = new NodoAFN("S" + contador, "£");
+                NodoAFN nodo6 = new NodoAFN("S" + contador, "epsilon");
                 this.contador++;
                 // enlazando
                 nodo5.estadoSiguiente1 = nodo6;
@@ -229,32 +229,49 @@ public class AFN {
                 nodo1.estadoSiguiente2 = nodo2;
                 NodoAFN[] aux = {nodo1, nodo6};
                 this.conjuntos.push(aux);
-            // sino se enlaza un conjunto y una hoja
+                // sino se enlaza un conjunto y una hoja
             } else {
-                // obtenemos la hoja que esta en el top
-                String hoja1 = this.hojas.pop();
-                // construimos el conjunto y lo añadimos a la cola de conjuntos
-                NodoAFN nodo1 = new NodoAFN("S" + contador, "£");
-                this.contador++;
-                NodoAFN nodo2 = new NodoAFN("S" + contador, "£");
-                this.contador++;
-                NodoAFN nodo3 = new NodoAFN("S" + contador, hoja1);
-                this.contador++;  
-                NodoAFN nodo4 = new NodoAFN("S" + contador, "£");
-                this.contador++;
-                // enlazando                    
-                NodoAFN[] conjunto = this.conjuntos.pop();
-                conjunto[1].estadoSiguiente1 = nodo4;
-                nodo3.estadoSiguiente1 = nodo4;
-                nodo2.estadoSiguiente1 = nodo3;
-                nodo1.estadoSiguiente1 = conjunto[0];
-                nodo1.estadoSiguiente2 = nodo2;
-                NodoAFN[] aux = {nodo1, nodo4};
-                this.conjuntos.push(aux);
-            }           
+                if (!this.hojas.isEmpty()) {
+                    // obtenemos la hoja que esta en el top
+                    String hoja1 = this.hojas.pop();
+                    // construimos el conjunto y lo añadimos a la cola de conjuntos
+                    NodoAFN nodo1 = new NodoAFN("S" + contador, "epsilon");
+                    this.contador++;
+                    NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
+                    this.contador++;
+                    NodoAFN nodo3 = new NodoAFN("S" + contador, hoja1);
+                    this.contador++;
+                    NodoAFN nodo4 = new NodoAFN("S" + contador, "epsilon");
+                    this.contador++;
+                    // enlazando                    
+                    NodoAFN[] conjunto = this.conjuntos.pop();
+                    conjunto[1].estadoSiguiente1 = nodo4;
+                    nodo3.estadoSiguiente1 = nodo4;
+                    nodo2.estadoSiguiente1 = nodo3;
+                    nodo1.estadoSiguiente1 = conjunto[0];
+                    nodo1.estadoSiguiente2 = nodo2;
+                    NodoAFN[] aux = {nodo1, nodo4};
+                    this.conjuntos.push(aux);
+                } else {
+                    // construimos el conjunto y lo añadimos a la cola de conjuntos
+                    NodoAFN nodo1 = new NodoAFN("S" + contador, "epsilon");
+                    this.contador++;
+                    NodoAFN nodo2 = new NodoAFN("S" + contador, "epsilon");
+                    this.contador++;
+                    // enlazando                    
+                    NodoAFN[] conjunto1 = this.conjuntos.pop();
+                    NodoAFN[] conjunto2 = this.conjuntos.pop();
+                    conjunto1[1].estadoSiguiente1 = nodo2;
+                    conjunto2[1].estadoSiguiente1 = nodo2;
+                    nodo1.estadoSiguiente1 = conjunto1[0];
+                    nodo1.estadoSiguiente2 = conjunto2[0];
+                    NodoAFN[] aux = {nodo1, nodo2};
+                    this.conjuntos.push(aux);
+                }
+            }
         }
     }
-    
+
     // ============= GRAPHVIZ ==============
     public void crearDot(String cadena, String ruta) {
         FileWriter fichero = null;
@@ -296,11 +313,11 @@ public class AFN {
     public String nodosGraphviz(NodoAFN aux) { //metodo preorden
         String nodos = "";
         if (aux != null && !aux.yaEsta1) {
-            if(aux.llegaronCon.equals("#")) {
-               nodos += aux.estado + "[shape=\"doublecircle\"];\n"; 
+            if (aux.llegaronCon.equals("#")) {
+                nodos += aux.estado + "[shape=\"doublecircle\"];\n";
             } else {
                 nodos += aux.estado + "[shape=\"circle\"]\n";
-            }           
+            }
             aux.yaEsta1 = true;
             nodos += this.nodosGraphviz(aux.estadoSiguiente1);
             nodos += this.nodosGraphviz(aux.estadoSiguiente2);
@@ -310,7 +327,7 @@ public class AFN {
 
     public String enlazarGraphviz(NodoAFN aux) {
         String cadena = "";
-        if (aux != null && !aux.yaEsta2) {          
+        if (aux != null && !aux.yaEsta2) {
             //validaciones
             if (aux.estadoSiguiente1 != null) {
                 cadena += aux.estado + "->" + aux.estadoSiguiente1.estado + " [label=\"" + aux.estadoSiguiente1.llegaronCon + "\"]\n";
@@ -327,12 +344,13 @@ public class AFN {
 }
 
 class NodoAFN {
+
     public String estado;
     public String llegaronCon;
     public boolean yaEsta1, yaEsta2;
     public NodoAFN estadoSiguiente1;
     public NodoAFN estadoSiguiente2;
-    
+
     public NodoAFN(String estado, String llegaronCon) {
         this.estado = estado;
         this.llegaronCon = llegaronCon;

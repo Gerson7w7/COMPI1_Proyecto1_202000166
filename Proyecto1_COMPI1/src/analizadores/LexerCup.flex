@@ -16,9 +16,9 @@ import java_cup.runtime.Symbol;
 ALFANUMERICO = ([A-Za-z_])[A-Za-z0-9_]+
 NUMERO = [0-9]+([.][0-9]+)?
 IGNORAR = [ ,\t,\r,\n]+
-COMENTARIOS = "<!"(.|\n)*"!>"|"//".*
+COMENTARIOS = "<!"[^"!>"]*"!>"|"//".*
 STRING = \"[^\"]*\"
-RANGO = ."~".|.(",".)+
+RANGO = (."~".)|(.(",".)+)|(.(", ".)+)
 %{
     private Symbol symbol(int type, Object value){
         return new Symbol(type, yyline, yycolumn, value);
